@@ -56,7 +56,7 @@ body {
   background-image: url("./assets/images/partly-cloudy.jpg");
   background-size: cover;
   display: grid;
-  grid-template-rows: 1fr 5fr 1fr;
+  grid-template-rows: 1fr 5fr 1.25fr;
   padding: 3rem;
 }
 
@@ -79,7 +79,9 @@ body {
 }
 
 .date {
-  font-size: 1.125rem;
+  font-size: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 0.5rem;
 }
 
 .main-section {
@@ -118,7 +120,9 @@ body {
 }
 
 .weather-text {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  text-shadow: 2px 2px 2px rgb(9, 255, 9);
 }
 
 .feels-like-container {
@@ -183,30 +187,6 @@ input::placeholder {
   bottom: 5%;
 }
 
-/* .search-icon {
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  bottom: 5%;
-  color: rgba(187, 255, 0, 0.685);
-}
-
-.material-icons.md-dark {
-  color: rgba(0, 0, 0, 0.54);
-}
-
-.material-icons.md-light {
-  color: rgba(255, 255, 255, 1);
-} */
-
-.submit-btn svg path {
-  fill: white;
-}
-
-svg path {
-  stroke: rgb(98, 243, 1);
-}
-
 .search-icon {
   filter: invert(70%) sepia(27%) saturate(3164%) hue-rotate(50deg)
     brightness(108%) contrast(107%);
@@ -216,14 +196,58 @@ svg path {
 
 /* Forecast Section */
 
+.hourly-forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  place-self: center;
+  gap: 1rem;
+}
+
+.hourly-forecast p {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
 .forecast-section {
   display: flex;
   gap: 4rem;
-  justify-content: center;
   overflow-x: scroll;
+  max-width: 100%;
+  justify-self: center;
 }
 
-/* .forecast-section::-webkit-scrollbar {
-  width: 100px;
+/* width */
+::-webkit-scrollbar {
+  width: 200px;
+  margin-top: 2rem;
 }
- */
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: red;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+}
+
+.forecast-section > * {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+  font-size: 1.25rem;
+}

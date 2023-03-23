@@ -52,9 +52,17 @@ async function fetchData(city) {
     input.value = "";
     console.log(sevenDaysForecastData);
     populateFields(currentData, forecastData, sevenDaysForecastData);
+
+    createHourlyForecast(sevenDaysForecastData, getLocalTime(currentData));
   } catch (error) {
     console.log(error);
   }
+}
+
+function getLocalTime(currentData) {
+  const hourNow = parseInt(currentData.current.last_updated.substring(11, 13));
+
+  return hourNow;
 }
 
 function populateFields(now, forecastData, sevenDaysForecastData) {
@@ -73,11 +81,18 @@ function populateFields(now, forecastData, sevenDaysForecastData) {
   ).innerHTML = `${now.current.wind_kph} km/h`;
 
   // Change background image and color according to weather
-
-  if (now.current.precip_mm > 0) {
+  // Rainy
+  if (now.current.is_day === 1 && now.current.condition.text.includes("rain")) {
+    body.style.backgroundImage = "url('./assets/images/light-rain.jpg')";
+    body.style.color = "white";
+  } else if (
+    now.current.is_day === 0 &&
+    now.current.condition.text.includes("rain")
+  ) {
     body.style.backgroundImage = "url('./assets/images/rainy.jpg')";
     body.style.color = "white";
   } else if (
+    // Cloudy
     now.current.is_day === 0 &&
     now.current.condition.text === "Partly cloudy"
   ) {
@@ -92,8 +107,9 @@ function populateFields(now, forecastData, sevenDaysForecastData) {
     body.style.backgroundImage = "url('./assets/images/partly-cloudy.jpg')";
     body.style.color = "black";
   } else if (
+    // Sunny and clear
     now.current.is_day === 1 &&
-    now.current.condition.text === "Clear"
+    now.current.condition.text === "Sunny"
   ) {
     body.style.backgroundImage = "url('./assets/images/sunny.jpg')";
     body.style.color = "black";
@@ -103,62 +119,78 @@ function populateFields(now, forecastData, sevenDaysForecastData) {
   ) {
     body.style.backgroundImage = "url('./assets/images/clear-sky-night.jpg')";
     body.style.color = "white";
-  } else if (now.current.is_day === 1 && now.current.wind_kph > 20) {
-    body.style.backgroundImage = "url('./assets/images/windy.jpg')";
-    body.style.color = "black";
+  } else if (now.current.condition.text.includes("Overcast")) {
+    // Overcast
+    body.style.backgroundImage = "url('./assets/images/overcast.jpg')";
+    body.style.color = "white";
   } else if (
     now.current.is_day === 1 &&
-    now.current.condition.text === "Sunny"
+    now.current.condition.text.includes("snow")
   ) {
-    body.style.backgroundImage = "url('./assets/images/clear.jpg')";
+    // Snowy
+    body.style.backgroundImage = "url('./assets/images/snowy.jpg')";
     body.style.color = "black";
+  } else if (
+    now.current.is_day === 0 &&
+    now.current.condition.text.includes("snow")
+  ) {
+    body.style.backgroundImage = "url('./assets/images/snowy-night.jpg')";
+    body.style.color = "white";
+  } else if (
+    // Misty
+    (now.current.is_day === 1 &&
+      (now.current.condition.text.includes("Mist") ||
+        now.current.condition.text.includes("Fog"))) ||
+    now.current.condition.text.includes("fog")
+  ) {
+    body.style.backgroundImage = "url('./assets/images/misty.jpg')";
+    body.style.color = "black";
+  } else if (
+    (now.current.is_day === 0 &&
+      (now.current.condition.text.includes("Mist") ||
+        now.current.condition.text.includes("Fog"))) ||
+    now.current.condition.text.includes("fog")
+  ) {
+    body.style.backgroundImage = "url('./assets/images/misty-night.jpg')";
+    body.style.color = "white";
   }
+}
 
-  // 24 hours forecast
+// 24 hours forecast
 
-  const hourNow = sevenDaysForecastData.current.last_updated.split("")[12];
-  console.log(hourNow);
-  const hours = [];
-
-  for (let i = hourNow; i < 24; i++) {
+function createHourlyForecast(sevenDaysForecastData, localTime) {
+  forecastSection.innerHTML = "";
+  for (let i = localTime + 1; i < 24; i++) {
     const individualForecastContainer = document.createElement("div");
     const hourDiv = document.createElement("div");
+    hourDiv.innerHTML = `<strong>${i}:00</strong>`;
     const degreeDiv = document.createElement("div");
-    const weatherIconDiv = document.createElement("img");
+    const weatherIcon = document.createElement("img");
+    console.log(i);
 
-    hourDiv.innerHTML = sevenDaysForecastData.forecast.forecastday[0].hour[
-      i
-    ].time.substring(11, 16);
-
-    hours.push(
-      sevenDaysForecastData.forecast.forecastday[0].hour[i].time.substring(
-        11,
-        16
-      )
-    );
+    degreeDiv.innerHTML = `${sevenDaysForecastData.forecast.forecastday[0].hour[i].temp_c} °C`;
+    weatherIcon.src = `https:${sevenDaysForecastData.forecast.forecastday[0].hour[i].condition.icon}`;
 
     individualForecastContainer.appendChild(hourDiv);
+    individualForecastContainer.appendChild(degreeDiv);
+    individualForecastContainer.appendChild(weatherIcon);
     forecastSection.appendChild(individualForecastContainer);
   }
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < localTime + 2; i++) {
     const individualForecastContainer = document.createElement("div");
     const hourDiv = document.createElement("div");
     const degreeDiv = document.createElement("div");
-    const weatherIconDiv = document.createElement("img");
-    hourDiv.innerHTML = sevenDaysForecastData.forecast.forecastday[1].hour[
-      i
-    ].time.substring(11, 16);
+    const weatherIcon = document.createElement("img");
 
-    hours.push(
-      sevenDaysForecastData.forecast.forecastday[1].hour[i].time.substring(
-        11,
-        16
-      )
-    );
+    hourDiv.innerHTML = `<strong>${i}:00</strong>`;
+
+    degreeDiv.innerHTML = `${sevenDaysForecastData.forecast.forecastday[0].hour[i].temp_c} °C`;
+    weatherIcon.src = `https:${sevenDaysForecastData.forecast.forecastday[0].hour[i].condition.icon}`;
+
     individualForecastContainer.appendChild(hourDiv);
+    individualForecastContainer.appendChild(degreeDiv);
+    individualForecastContainer.appendChild(weatherIcon);
     forecastSection.appendChild(individualForecastContainer);
   }
-
-  console.log(hours);
 }
