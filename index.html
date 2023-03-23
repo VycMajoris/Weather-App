@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <script src="./script.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+  </head>
+  <body>
+    <section class="city-section">
+      <h1 class="city"></h1>
+      <div class="country"></div>
+      <div class="date"></div>
+      <div class="form-container">
+        <form class="form">
+          <input type="text" placeholder="Enter a city" id="input" />
+          <button type="submit" class="submit-btn"></button>
+         <!--  <span class="material-icons search-icon">search</span> -->
+        </form>
+      </div>
+    </section>
+    <section class="main-section">
+        <div class="current-weather">
+            <h2 class="current-degree add-flex"></h2>
+            <p class="weather-text"></p>
+        </div>
+ 
+      <div class="feels-like-container">
+        <h3>Feels Like</h3>
+        <h4></h4>
+      </div>
+      <div class="humidity-container add-flex">
+        <h3>Humidity</h3>
+        <h4></h4>
+      </div>
+      <div class="chance-of-rain-container add-flex">
+        <h3>Chance of Rain</h3>
+        <h4>/h4>
+      </div>
+      <div class="wind-speed-container add-flex">
+        <h3>Wind Speed</h3>
+        <h4></h4>
+      </div>
+    </section>
+    <section class="forecast-section"></section>
+  </body>
+</html>
